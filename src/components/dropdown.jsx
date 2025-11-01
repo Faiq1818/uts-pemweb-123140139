@@ -8,16 +8,17 @@ export default function SimpleDropdown() {
   const [selected, setSelected] = useState('Select an option');
 
   const options = [
+    'Random Images',
     'Gallery',
-    'Option 2',
-    'Option 3',
-    'Option 4'
   ];
 
   const handleSelect = (option) => {
     setSelected(option);
     setIsOpen(false);
 
+    if (option === "Random Images") {
+      navigate("/");
+    }
     if (option === "Gallery") {
       navigate("/doggallery");
     }

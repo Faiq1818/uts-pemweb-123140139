@@ -33,6 +33,11 @@ export default function Root() {
     return (
       <div className="h-screen flex flex-col">
         <Nav />
+
+        <div className="justify-center flex">
+          <SimpleDropdown />
+        </div>
+
         <div className="flex flex-col justify-center items-center h-screen">
           <HashLoader color={"#C5C5C5"} size={30} />
         </div>
