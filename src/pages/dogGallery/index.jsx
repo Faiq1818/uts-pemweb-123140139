@@ -154,7 +154,7 @@ export default function DogGallery() {
   };
 
   const handleFavoriteNavigate = () => {
-      navigate("/dogfavorites");
+    navigate("/dogfavorites");
   };
 
   const handleFavorite = (img) => {
@@ -180,14 +180,14 @@ export default function DogGallery() {
       <Nav />
 
       <div className="justify-center flex flex-row mb-10 gap-4">
-        <div
-          className="flex flex-row items-center gap-2 border py-1 px-4 rounded-lg border-[#C5C5C5] hover:bg-slate-800 cursor-pointer"
-          onClick={handleFavoriteNavigate}
-        >
-          <p>Favorites</p>
-          <MdFavoriteBorder />
-        </div>
         <DogBreedDropdownContext.Provider value={{ breedSelected, setBreedSelected, options }}>
+          <div
+            className="flex flex-row items-center gap-2 border py-1 px-4 rounded-lg border-[#C5C5C5] hover:bg-slate-800 cursor-pointer"
+            onClick={handleFavoriteNavigate}
+          >
+            <p>Favorites</p>
+            <MdFavoriteBorder />
+          </div>
           <BreedDropdown />
         </DogBreedDropdownContext.Provider>
         <SimpleDropdown />

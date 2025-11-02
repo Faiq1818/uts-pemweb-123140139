@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
+import Nav from "../../components/nav";
 import { HashLoader } from "react-spinners";
-import Nav from "../../components/nav"
+import { GrFormNextLink } from "react-icons/gr";
+import SimpleDropdown from "../../components/dropdown";
+import { CiHeart, CiTrash } from "react-icons/ci";
 
 export default function DogFavorites() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getLocalStorage = async () => {
+  const fetchDog = async () => {
     try {
       setLoading(true);
-
-
-      setImages(JSON.parse(localStorage.getItem('favorites')) || []);
-      console.log(images)
+      const res = JSON.parse(localStorage.getItem('favorites'))
+      const data = res;
+      setImages(data);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -21,8 +23,20 @@ export default function DogFavorites() {
   };
 
   useEffect(() => {
-    getLocalStorage();
+    fetchDog();
   }, []);
+
+  const handleNext = () => {
+    fetchDog();
+  };
+
+  const handleFavorite = (img) => {
+    const existing = JSON.parse(localStorage.getItem('favorites')) || [];
+    const updated = [...existing, img];
+    localStorage.setItem('favorites', JSON.stringify(updated));
+    console.log(updated);
+    console.log(img)
+  };
 
   if (loading) {
     return (
@@ -39,9 +53,6 @@ export default function DogFavorites() {
       <Nav />
 
       <div className="justify-center flex flex-row mb-10 gap-4">
-        <DogBreedDropdownContext.Provider value={{ breedSelected, setBreedSelected, options }}>
-          <BreedDropdown />
-        </DogBreedDropdownContext.Provider>
         <SimpleDropdown />
       </div>
 
@@ -51,14 +62,18 @@ export default function DogFavorites() {
           {images.map((img, index) => (
             <div
               key={index}
-              className="aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white"
+              className="relative group aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white"
             >
               <img
                 onClick={() => handleFavorite(img)}
                 src={img}
                 alt={`Dog ${index + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-75"
               />
+
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <CiTrash className="text-white text-5xl drop-shadow-lg" />
+              </div>
             </div>
           ))}
         </div>
@@ -77,4 +92,3 @@ export default function DogFavorites() {
     </div>
   );
 }
-
