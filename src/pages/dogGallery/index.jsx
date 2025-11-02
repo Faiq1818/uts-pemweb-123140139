@@ -1,13 +1,16 @@
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import Nav from "../../components/nav";
 import { HashLoader } from "react-spinners";
 import { GrFormNextLink } from "react-icons/gr";
 import SimpleDropdown from "../../components/dropdown";
 import BreedDropdown from "./breedDropdown";
+import { MdFavoriteBorder } from "react-icons/md";
+import { useNavigate } from "react-router";
 
 export const DogBreedDropdownContext = createContext();
 
 export default function DogGallery() {
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [breedSelected, setBreedSelected] = useState('Select a breed');
@@ -133,7 +136,7 @@ export default function DogGallery() {
         res = await fetch(`https://dog.ceo/api/breed/${breedSelected}/images/random/50`);
       }
       const data = await res.json();
-      console.log(res)
+      console.log(data.message)
       setImages(data.message);
       setLoading(false);
     } catch (err) {
@@ -150,6 +153,18 @@ export default function DogGallery() {
     fetchDog();
   };
 
+  const handleFavoriteNavigate = () => {
+      navigate("/dogfavorites");
+  };
+
+  const handleFavorite = (img) => {
+    const existing = JSON.parse(localStorage.getItem('favorites')) || [];
+    const updated = [...existing, img];
+    localStorage.setItem('favorites', JSON.stringify(updated));
+    console.log(updated);
+    console.log(img)
+  };
+
   if (loading) {
     return (
       <div className="h-screen flex flex-col">
@@ -160,12 +175,18 @@ export default function DogGallery() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen">
       <Nav />
 
-      <div className="justify-center flex mb-10 gap-4">
+      <div className="justify-center flex flex-row mb-10 gap-4">
+        <div
+          className="flex flex-row items-center gap-2 border py-1 px-4 rounded-lg border-[#C5C5C5] hover:bg-slate-800 cursor-pointer"
+          onClick={handleFavoriteNavigate}
+        >
+          <p>Favorites</p>
+          <MdFavoriteBorder />
+        </div>
         <DogBreedDropdownContext.Provider value={{ breedSelected, setBreedSelected, options }}>
           <BreedDropdown />
         </DogBreedDropdownContext.Provider>
@@ -181,6 +202,7 @@ export default function DogGallery() {
               className="aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white"
             >
               <img
+                onClick={() => handleFavorite(img)}
                 src={img}
                 alt={`Dog ${index + 1}`}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
