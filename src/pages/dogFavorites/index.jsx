@@ -3,7 +3,7 @@ import Nav from "../../components/nav";
 import { HashLoader } from "react-spinners";
 import { GrFormNextLink } from "react-icons/gr";
 import SimpleDropdown from "../../components/dropdown";
-import { CiHeart, CiTrash } from "react-icons/ci";
+import { CiTrash } from "react-icons/ci";
 
 export default function DogFavorites() {
   const [images, setImages] = useState([]);
@@ -12,7 +12,7 @@ export default function DogFavorites() {
   const fetchDog = async () => {
     try {
       setLoading(true);
-      const res = JSON.parse(localStorage.getItem('favorites'))
+      const res = JSON.parse(localStorage.getItem('favorites')) || [];
       const data = res;
       setImages(data);
       setLoading(false);
@@ -30,11 +30,12 @@ export default function DogFavorites() {
     fetchDog();
   };
 
-  const handleFavorite = (img) => {
+  const handleRemove = (img) => {
     const existing = JSON.parse(localStorage.getItem('favorites')) || [];
-    const updated = [...existing, img];
+    const updated = existing.filter((item) => item !== img);
     localStorage.setItem('favorites', JSON.stringify(updated));
     console.log(updated);
+    fetchDog();
     console.log(img)
   };
 
@@ -52,7 +53,7 @@ export default function DogFavorites() {
     <div className="min-h-screen">
       <Nav />
 
-      <div className="justify-center flex flex-row mb-10 gap-4">
+      <div className="justify-center flex flex-row mb-10 gap-4 relative z-50">
         <SimpleDropdown />
       </div>
 
@@ -62,16 +63,15 @@ export default function DogFavorites() {
           {images.map((img, index) => (
             <div
               key={index}
-              className="relative group aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white"
+              className="relative group aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white cursor-pointer"
             >
               <img
-                onClick={() => handleFavorite(img)}
+                onClick={() => handleRemove(img)}
                 src={img}
                 alt={`Dog ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-75"
               />
-
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                 <CiTrash className="text-white text-5xl drop-shadow-lg" />
               </div>
             </div>

@@ -6,6 +6,7 @@ import SimpleDropdown from "../../components/dropdown";
 import BreedDropdown from "./breedDropdown";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useNavigate } from "react-router";
+import { CiHeart } from "react-icons/ci";
 
 export const DogBreedDropdownContext = createContext();
 
@@ -179,7 +180,7 @@ export default function DogGallery() {
     <div className="min-h-screen">
       <Nav />
 
-      <div className="justify-center flex flex-row mb-10 gap-4">
+      <div className="justify-center flex flex-row mb-10 gap-4 relative z-50">
         <DogBreedDropdownContext.Provider value={{ breedSelected, setBreedSelected, options }}>
           <div
             className="flex flex-row items-center gap-2 border py-1 px-4 rounded-lg border-[#C5C5C5] hover:bg-slate-800 cursor-pointer"
@@ -199,14 +200,18 @@ export default function DogGallery() {
           {images.map((img, index) => (
             <div
               key={index}
-              className="aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white"
+              className="relative group aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow bg-white cursor-pointer"
             >
               <img
                 onClick={() => handleFavorite(img)}
                 src={img}
                 alt={`Dog ${index + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-75"
               />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <CiHeart className="text-white text-5xl drop-shadow-lg" />
+              </div>
+
             </div>
           ))}
         </div>
