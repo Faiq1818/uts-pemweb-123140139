@@ -22,3 +22,12 @@ npm run dev
 ```
 5. Cek localhost http://localhost:5173/
 
+## Screenshot Aplikasi
+#### Random Images
+![Screenshot 1](./screenshots/screenshot1.png)
+
+#### Gallery Grid
+![Screenshot 3](./screenshots/screenshot3.png)
+
+#### Cat Facts
+![Screenshot 2](./screenshots/screenshot2.png)
