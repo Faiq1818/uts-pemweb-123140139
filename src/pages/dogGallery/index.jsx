@@ -14,6 +14,7 @@ export default function DogGallery() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
   const [breedSelected, setBreedSelected] = useState('Select a breed');
 
   const options = [
@@ -137,7 +138,6 @@ export default function DogGallery() {
         res = await fetch(`https://dog.ceo/api/breed/${breedSelected}/images/random/50`);
       }
       const data = await res.json();
-      console.log(data.message)
       setImages(data.message);
       setLoading(false);
     } catch (err) {
@@ -162,8 +162,8 @@ export default function DogGallery() {
     const existing = JSON.parse(localStorage.getItem('favorites')) || [];
     const updated = [...existing, img];
     localStorage.setItem('favorites', JSON.stringify(updated));
-    console.log(updated);
-    console.log(img)
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 1500);
   };
 
   if (loading) {
@@ -227,6 +227,13 @@ export default function DogGallery() {
         </div>
       </div>
 
+      {showAlert && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-black opacity-75 px-6 py-3 rounded-lg text-center">
+            <p>Gambar tersimpan!</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

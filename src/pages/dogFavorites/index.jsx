@@ -34,9 +34,7 @@ export default function DogFavorites() {
     const existing = JSON.parse(localStorage.getItem('favorites')) || [];
     const updated = existing.filter((item) => item !== img);
     localStorage.setItem('favorites', JSON.stringify(updated));
-    console.log(updated);
     fetchDog();
-    console.log(img)
   };
 
   if (loading) {
